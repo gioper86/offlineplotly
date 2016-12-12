@@ -1,0 +1,4 @@
+flask==0.11.1
+plotly==1.12.9
+pandas==0.18.1
+Quandl==3.0.1

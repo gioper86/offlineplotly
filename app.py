@@ -4,12 +4,10 @@ import json
 
 import plotly
 import plotly.graph_objs as go
-import plotly.offline as offline
 from plotly.graph_objs import Figure
 from plotly.graph_objs import Layout
 
 import pandas as pd
-import numpy as np
 from json import encoder
 import quandl
 
@@ -34,7 +32,6 @@ def prepare_graph():
 	    name = "Rotterdam"
 	)
 	
-	data = [trace1, trace2]
 	layout = dict(title = 'Netherlands house prices')
 	return Figure(data=[trace1, trace2], layout=layout)
 
