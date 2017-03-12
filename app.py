@@ -9,31 +9,28 @@ from plotly.graph_objs import Layout
 
 import pandas as pd
 from json import encoder
-import quandl
 
 app = Flask(__name__)
 app.debug = True
 
 
 def prepare_graph():
-	mydata = quandl.get("NETH/HPI")
-	df_cities = mydata.iloc[:,-4:]
-	trace1 = go.Scatter (
-	    x = df_cities["Amsterdam"].index,
-	    y = df_cities["Amsterdam"],
-	    mode = 'lines',
-	    name = "Amsterdam"
-	)
-
-	trace2 = go.Scatter (
-	    x = df_cities["Rotterdam"].index,
-	    y = df_cities["Rotterdam"],
-	    mode = 'lines+markers',
-	    name = "Rotterdam"
-	)
+	df = pd.read_csv('static/san_francisco.csv')
+	df = df[['TMAX','TMIN','DATE']]
+	df['DATE'] = pd.to_datetime(df['DATE'], format="%Y%m%d")
+	df = df.set_index('DATE')
+	df = df.sort_index()
+	df = df['20140101':'20161231']
 	
-	layout = dict(title = 'Netherlands house prices')
-	return Figure(data=[trace1, trace2], layout=layout)
+	data = [go.Scatter(
+		x = df.index,
+		y = df[col],
+		name = col,
+		mode = 'lines',
+	) for col in df.columns]
+	
+	layout = dict(title = 'San Francisco temperature')
+	return Figure(data=data, layout=layout)
 
 
 @app.route("/data")
